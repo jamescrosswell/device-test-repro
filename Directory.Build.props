@@ -13,33 +13,12 @@
 
     <!-- Allow references to unsigned assemblies (like MAUI) from signed projects -->
     <NoWarn>$(NoWarn);CS8002</NoWarn>
-
-    <!-- We need to support old stuff. Applications should definitely address these advisory warnings though. -->
-    <NoWarn>$(NoWarn);NU1903</NoWarn>
-
-    <!-- https://learn.microsoft.com/en-us/dotnet/core/compatibility/sdk/8.0/dotnet-restore-audit#version-introduced -->
-    <WarningsNotAsErrors>NU1903</WarningsNotAsErrors>
   </PropertyGroup>
 
-  <!--
-    Note: The following platform-specific properties need to be set in both Directory.Build.props and DirectoryBuild.targets.
-    TODO: Figure out how to consolidate to a single location.
-    - Directory.Build.props will get imported at the beginning of the project files, so sets properties that are
-    prerequisites for the build and can be overriden in the project files.
-    - Directory.Build.targets will get imported at the end of the project files, so can be used to run common custom
-    tasks or ultimately override properties set in Directory.Build.props or the project files.
-  -->
   <PropertyGroup>
     <TargetPlatformIdentifier>$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)'))</TargetPlatformIdentifier>
     <SupportedOSPlatformVersion Condition="'$(TargetPlatformIdentifier)' == 'android'">21.0</SupportedOSPlatformVersion>
   </PropertyGroup>
-
-  <!-- Allow setting CLSCompliant via property in any csproj -->
-  <ItemGroup>
-    <AssemblyAttribute Include="CLSCompliantAttribute" Condition="'$(CLSCompliant)' == 'true'">
-      <_Parameter1>true</_Parameter1>
-    </AssemblyAttribute>
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="UnoptimizedAssemblyDetector" Version="0.1.1" PrivateAssets="All" />
@@ -49,10 +28,6 @@
   <ItemGroup>
     <!-- Import the root global usings -->
     <Compile Include="$(MSBuildThisFileDirectory)GlobalUsings.cs" />
-
-    <!-- Add these here instead, so we can remove them for projects that don't have STJ available. -->
-    <Using Include="System.Text.Json" />
-    <Using Include="System.Text.Json.Serialization" />
   </ItemGroup>
 
   <!-- Public key of .assets/Sentry.snk - not a secret.  Used by other InternalsVisibleTo entries throughout the solution. -->
