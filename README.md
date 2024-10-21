@@ -5,13 +5,15 @@ to reproduce an issues we're having running Device Tests on xHarness that use NS
 to target net8.0-android and net8.0-ios (from net7.0-android/ios). All of these tests are passing in our main branch, 
 where the device test runner targets net7.0. 
 
-The error message we're 
-seeing is:
+On any branch where we bump to net8.0 targets for our device tests, we get the following error:
 
 > System.ArgumentException : Can not create proxy for type Sentry.IPing because it is not accessible. Make it public, or internal and mark your assembly with [assembly: InternalsVisibleTo(\"DynamicProxyGenAssembly2, PublicKey=0024000004800000940000000602000000240000525341310004000001000100c547cac37abd99c8db225ef2f6c8a3602f3b3606cc9891605d02baa56104f4cfc0734aa39b93bf7852f7d9266654753cc297e7d2edfe0bac1cdcf9f717241550e0a7b191195b7667bb4f64bcb8e2121380fd1d9d46ad2d92d2d15605093924cceaf74c4861eff62abf69b9291ed0a340e113be11e6a7d3113e92484cf7045cc7\")] attribute, because assembly Sentry is strong-named. Arg_ParamName_Name, additionalInterfacesToProxy]]
 
-Obviously, we already have that attribute in place - otherwise our net7.0-android tests wouldn't be passing. You can see 
-this has been set at the end of the `/Directory.Build.props` file in the repository root.
+## Cause of the problem
+
+The problem appears to be due to the `<IsTrimmable>true</IsTrimmable>` MS Build property in `src/Sentry/Sentry.csproj`.
+
+If we set `<IsTrimmable>false</IsTrimmable>` instead, then the tests pass.
 
 # Running the tests
 
