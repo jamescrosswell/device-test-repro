@@ -1,0 +1,22 @@
+<Project>
+
+  <!--
+    Note: The following platform-specific properties need to be set in both Directory.Build.props and DirectoryBuild.targets.
+    TODO: Figure out how to consolidate to a single location.
+    - Directory.Build.props will get imported at the beginning of the project files, so sets properties that are
+    prerequisites for the build and can be overriden in the project files.
+    - Directory.Build.targets will get imported at the end of the project files, so can be used to run common custom
+    tasks or ultimately override properties set in Directory.Build.props or the project files.
+  -->
+  <PropertyGroup>
+    <TargetPlatformIdentifier>$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)'))</TargetPlatformIdentifier>
+    <SupportedOSPlatformVersion Condition="'$(TargetPlatformIdentifier)' == 'android'">21.0</SupportedOSPlatformVersion>
+  </PropertyGroup>
+
+  <!-- Allow setting CLSCompliant via property in any csproj -->
+  <ItemGroup>
+    <AssemblyAttribute Include="CLSCompliantAttribute" Condition="'$(CLSCompliant)' == 'true'">
+      <_Parameter1>true</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,61 @@
+<Project>
+
+  <PropertyGroup>
+    <VersionPrefix>4.12.1</VersionPrefix>
+    <LangVersion>12</LangVersion>
+    <AccelerateBuildsInVisualStudio>true</AccelerateBuildsInVisualStudio>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory).assets\Sentry.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
+    <Deterministic>true</Deterministic>
+    <Features>strict</Features>
+    <ImplicitUsings>true</ImplicitUsings>
+
+    <!-- Allow references to unsigned assemblies (like MAUI) from signed projects -->
+    <NoWarn>$(NoWarn);CS8002</NoWarn>
+
+    <!-- We need to support old stuff. Applications should definitely address these advisory warnings though. -->
+    <NoWarn>$(NoWarn);NU1903</NoWarn>
+
+    <!-- https://learn.microsoft.com/en-us/dotnet/core/compatibility/sdk/8.0/dotnet-restore-audit#version-introduced -->
+    <WarningsNotAsErrors>NU1903</WarningsNotAsErrors>
+  </PropertyGroup>
+
+  <!--
+    Note: The following platform-specific properties need to be set in both Directory.Build.props and DirectoryBuild.targets.
+    TODO: Figure out how to consolidate to a single location.
+    - Directory.Build.props will get imported at the beginning of the project files, so sets properties that are
+    prerequisites for the build and can be overriden in the project files.
+    - Directory.Build.targets will get imported at the end of the project files, so can be used to run common custom
+    tasks or ultimately override properties set in Directory.Build.props or the project files.
+  -->
+  <PropertyGroup>
+    <TargetPlatformIdentifier>$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)'))</TargetPlatformIdentifier>
+    <SupportedOSPlatformVersion Condition="'$(TargetPlatformIdentifier)' == 'android'">21.0</SupportedOSPlatformVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="UnoptimizedAssemblyDetector" Version="0.1.1" PrivateAssets="All" />
+    <PackageReference Include="Roslynator.Analyzers" Version="4.9.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Import the root global usings -->
+    <Compile Include="$(MSBuildThisFileDirectory)GlobalUsings.cs" />
+
+    <!-- Add these here instead, so we can remove them for projects that don't have STJ available. -->
+    <Using Include="System.Text.Json" />
+    <Using Include="System.Text.Json.Serialization" />
+  </ItemGroup>
+
+  <!-- Public key of .assets/Sentry.snk - not a secret.  Used by other InternalsVisibleTo entries throughout the solution. -->
+  <PropertyGroup>
+    <SentryPublicKey>002400000480000094000000060200000024000052534131000400000100010059964a931488bcdbd14657f1ee0df32df61b57b3d14d7290c262c2cc9ddaad6ec984044f761f778e1823049d2cb996a4f58c8ea5b46c37891414cb34b4036b1c178d7b582289d2eef3c0f1e9b692c229a306831ee3d371d9e883f0eb0f74aeac6c6ab8c85fd1ec04b267e15a31532c4b4e2191f5980459db4dce0081f1050fb8</SentryPublicKey>
+  </PropertyGroup>
+
+  <!-- Allow NSubstitute dynamic proxies to access any internal API.  Its PublicKey is not a secret. -->
+  <ItemGroup>
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" PublicKey="0024000004800000940000000602000000240000525341310004000001000100c547cac37abd99c8db225ef2f6c8a3602f3b3606cc9891605d02baa56104f4cfc0734aa39b93bf7852f7d9266654753cc297e7d2edfe0bac1cdcf9f717241550e0a7b191195b7667bb4f64bcb8e2121380fd1d9d46ad2d92d2d15605093924cceaf74c4861eff62abf69b9291ed0a340e113be11e6a7d3113e92484cf7045cc7" />
+  </ItemGroup>
+
+</Project>

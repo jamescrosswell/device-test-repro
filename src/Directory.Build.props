@@ -1,0 +1,37 @@
+<Project>
+
+  <Import Project="..\Directory.Build.props" />
+
+  <PropertyGroup>
+    <!--Generate xml docs for all projects under 'src'-->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <Authors>Sentry Team and Contributors</Authors>
+    <Company>Sentry.io</Company>
+    <Product>Sentry</Product>
+
+    <PackageTags>Sentry;GetSentry;Error-Reporting;Crash-Reporting;Exception-Handling</PackageTags>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryRoot>$(MSBuildThisFileDirectory)</RepositoryRoot>
+    <RepositoryUrl>https://github.com/getsentry/sentry-dotnet</RepositoryUrl>
+
+    <PackageIcon>sentry-nuget.png</PackageIcon>
+    <PackageProjectUrl>https://sentry.io</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+
+    <!--
+      SourceLink configuration
+      See https://github.com/dotnet/sourcelink/blob/main/README.md
+      And https://learn.microsoft.com/dotnet/core/project-sdk/msbuild-props
+    -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>
