@@ -34,6 +34,13 @@
     <SupportedOSPlatformVersion Condition="'$(TargetPlatformIdentifier)' == 'android'">21.0</SupportedOSPlatformVersion>
   </PropertyGroup>
 
+  <!-- Allow setting CLSCompliant via property in any csproj -->
+  <ItemGroup>
+    <AssemblyAttribute Include="CLSCompliantAttribute" Condition="'$(CLSCompliant)' == 'true'">
+      <_Parameter1>true</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="UnoptimizedAssemblyDetector" Version="0.1.1" PrivateAssets="All" />
     <PackageReference Include="Roslynator.Analyzers" Version="4.9.0" PrivateAssets="All" />
