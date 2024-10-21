@@ -26,6 +26,7 @@
     <Using Include="Xunit.Abstractions" />
 
     <PackageReference Include="NSubstitute" Version="5.1.0" />
+    <PackageReference Include="NSubstitute.Analyzers.CSharp" Version="1.0.17" />
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
     <PackageReference Include="xunit" Version="2.6.5" />
     <PackageReference Include="Xunit.SkippableFact" Version="1.4.13" />
